@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Diff</key>
+	<array>
+		<dict>
+			<key>ModifiedContent</key>
+			<string>import SwiftUI
+import PlaygroundSupport
+
+// MARK: Data
+
+let urlWithJSON = "https://pokeapi.co/api/v2/pokemon?limit=151"
+
+struct APIResults:Decodable {
+    var results:[Item]
+}
+
+struct Item:Identifiable, Codable {
+    var id:UUID = UUID()
+    var title:String
+    private enum CodingKeys: String, CodingKey {
+        case title = "name"
+    }
+}
+
+// MARK: Model
+
+class ItemsViewModel: ObservableObject {
+    @Published var items:[Item] = [Item]()
+    
+    init() {
+        shouldRefresh()
+    }
+    
+    func shouldRefresh() {
+        guard let url = URL(string:urlWithJSON) else { return }
+        URLSession.shared.dataTask(with: url) { (data, error, _) in 
+            guard let data = data else { return }
+            let pokemonList = try! JSONDecoder().decode(APIResults.self, from: data)
+            DispatchQueue.main.async {
+                self.items = pokemonList.results
+            }
+        }.resume()
+    }
+}
+
+// MARK: List
+
+struct ContentView:View {
+    @ObservedObject var viewModel: ItemsViewModel
+    
+    var body: some View {
+        NavigationView {        
+            List(viewModel.items) { item in
+                NavigationLink(destination: ItemDetail(item: item)){
+                    ItemRow(item: item)
+                }
+            }.navigationBarTitle("Items").navigationBarItems(trailing:
+                    Button("Refresh") {
+                        self.viewModel.shouldRefresh()
+                    }
+            )
+        }
+    }
+}
+
+// MARK: View
+
+struct ItemDetail:View {
+    var item:Item
+    var body:some View {
+        Text(item.title)
+    }
+}
+
+// MARK: Row
+
+struct ItemRow:View {
+    var item:Item
+    var body: some View {
+        Text(item.title)
+    }
+}
+
+PlaygroundPage.current.setLiveView(ContentView(viewModel: ItemsViewModel()))
+</string>
+			<key>ModifiedRange</key>
+			<string>{1, 1778}</string>
+			<key>OriginalContent</key>
+			<string></string>
+			<key>OriginalRange</key>
+			<string>{1, 0}</string>
+		</dict>
+	</array>
+	<key>File</key>
+	<string>Chapters/Chapter1.playgroundchapter/Pages/My Playground.playgroundpage/main.swift</string>
+</dict>
+</plist>
