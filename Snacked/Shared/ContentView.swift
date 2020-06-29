@@ -43,15 +43,12 @@ fileprivate func entryButton(preset:Preset, model:Model) -> Button<Text> {
 struct ContentView_Previews: PreviewProvider {
     
     static var previews: some View {
-        
-//        let items = [Item(title: "🍕", calories: 300.0, colorLiteral: "pink", createDate: Date()),
-//                     Item(title: "🍔", calories: 300.0, colorLiteral: "pink", createDate: Date()),
-//                     Item(title: "🍱", calories: 300.0, colorLiteral: "pink", createDate: Date())]
-//        let model = ItemsModel()
-//        model.items = items
-        
         Group {
-            ContentView(model: Model())
+            let items = [Item(title: "🍕", calories: 300.0, colorLiteral: "pink", createDate: Date()),
+                         Item(title: "🍔", calories: 300.0, colorLiteral: "pink", createDate: Date()),
+                         Item(title: "🍱", calories: 300.0, colorLiteral: "pink", createDate: Date())]
+            let model = Model()
+            ContentView(model: model)
         }
     }
 }

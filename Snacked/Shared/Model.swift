@@ -19,7 +19,9 @@ public struct Preset:Codable {
         self.calories = calories
         self.colorLiteral = colorLiteral
     }
-    
+}
+
+extension Preset {
     public var caloriesLabel:String {
         let measurement = Measurement(value: calories, unit: UnitEnergy.calories)
         let formatter = MeasurementFormatter()
@@ -37,37 +39,17 @@ struct Item:Identifiable, Codable {
     var id:UUID = UUID()
 }
 
-class Model: ObservableObject, Codable {
+class Model: ObservableObject {
     @Published var items:[Item] = Storage.loadItems() {
         didSet {
-            Storage.save(model: self)
+            Storage.saveItems(items: items)
         }
     }
     @Published var presets:[Preset] = Storage.loadPresets() {
         didSet {
-            Storage.save(model: self)
+            Storage.savePresets(presets: presets)
         }
     }
-    
-    // MARK: Codable
-    
-    enum CodingKeys: CodingKey {
-        case items, presets
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(items, forKey: .items)
-        try container.encode(presets, forKey: .presets)
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        items = try container.decode([Item].self, forKey: .items)
-        presets = try container.decode([Preset].self, forKey: .presets)
-    }
-    
-    init() { }
 }
 
 func defaultPresets()->[Preset] {
