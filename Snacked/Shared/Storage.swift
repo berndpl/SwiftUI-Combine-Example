@@ -24,10 +24,6 @@ public class Storage {
         return URL(fileURLWithPath: "?!?!")
     }
     
-    // MARK: - Persist Presets
-    
-    // MARK: - Persist State
-    
     class func save(model:Model) {
         
         // Encode
