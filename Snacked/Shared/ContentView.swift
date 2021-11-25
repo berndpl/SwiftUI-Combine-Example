@@ -20,13 +20,19 @@ struct ContentView: View {
                 entryButton(preset: defaultPresets()[2], model:model)
             }
             NavigationView {
-                List(model.items) { item in
-                    HStack {
+                List {
+                    ForEach (model.items, id: \.self) { item in
+                        HStack {
                         Text(item.title)
-                    }
-                }.navigationTitle("Snacked")
+                        }
+                    }.onDelete(perform: delete).navigationTitle("Snacked")
+                }
             }
         }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        model.items.remove(atOffsets: offsets)
     }
 }
 

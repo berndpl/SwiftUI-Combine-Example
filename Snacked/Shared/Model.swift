@@ -31,7 +31,7 @@ extension Preset {
     }
 }
 
-struct Item:Identifiable, Codable {
+struct Item:Identifiable, Codable, Hashable {
     public var title:String
     public var calories:Double
     public var colorLiteral:String

@@ -11,7 +11,7 @@ import SwiftUI
 struct SnackedApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(model: Model()!)
+            ContentView(model: Model())
         }
     }
 }
