@@ -12,6 +12,14 @@ struct ContentView: View {
     
     @State var showEntry = false
         
+    var groupedByDate: [Date: [Item]] {
+        Dictionary(grouping: model.items, by: {$0.createDate})
+    }
+    
+    var headers: [Date] {
+        groupedByDate.map({ $0.key }).sorted()
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -21,11 +29,20 @@ struct ContentView: View {
             }
             NavigationView {
                 List {
-                    ForEach (model.items, id: \.self) { item in
-                        HStack {
-                        Text(item.title)
+                    ForEach(headers, id: \.self) { header in
+                                    Section(header: Text(header, style: .date)) {
+                                        ForEach(groupedByDate[header]!) { item in
+                                            Text(item.title)
+                            }
                         }
                     }.onDelete(perform: delete).navigationTitle("Snacked")
+//                    Section(header: Text("Monday")) {
+//                    ForEach (model.items, id: \.self) { item in
+//                        HStack {
+//                        Text(item.title)
+//                        }
+//                    }.onDelete(perform: delete).navigationTitle("Snacked")
+//                    }
                 }
             }
         }

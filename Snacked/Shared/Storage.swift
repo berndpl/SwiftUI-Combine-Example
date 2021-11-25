@@ -23,6 +23,10 @@ public class Storage {
         return filePath
     }
     
+    class func resetItems() {
+        saveItems(items: [])
+    }
+    
     class func saveItems(items: [Item]) {
         // Encode
         let jsonEncoder = JSONEncoder()

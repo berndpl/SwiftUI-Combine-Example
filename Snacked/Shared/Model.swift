@@ -31,15 +31,24 @@ extension Preset {
     }
 }
 
-struct Item:Identifiable, Codable, Hashable {
+struct Item:Identifiable, Codable, Hashable, Comparable {
     public var title:String
     public var calories:Double
     public var colorLiteral:String
     public var createDate:Date
     var id:UUID = UUID()
+    static func < (lhs: Item, rhs: Item) -> Bool {
+        return lhs.createDate < rhs.createDate
+    }
 }
 
 class Model: ObservableObject {
+    
+    convenience init(items:[Item]) {
+        self.init()
+        Storage.saveItems(items: items)
+    }
+    
     @Published var items:[Item] = Storage.loadItems() {
         didSet {
             Storage.saveItems(items: items)
