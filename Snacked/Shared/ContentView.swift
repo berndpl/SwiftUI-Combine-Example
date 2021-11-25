@@ -10,15 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var model: Model
     
-    @State var showEntry = false
-        
-    var groupedByDate: [Date: [Item]] {
-        Dictionary(grouping: model.items, by: {$0.createDate})
-    }
-    
-    var headers: [Date] {
-        groupedByDate.map({ $0.key }).sorted()
-    }
+    @State var showEntry = false        
     
     var body: some View {
         VStack {
@@ -29,9 +21,9 @@ struct ContentView: View {
             }
             NavigationView {
                 List {
-                    ForEach(headers, id: \.self) { header in
-                                    Section(header: Text(header, style: .date)) {
-                                        ForEach(groupedByDate[header]!) { item in
+                    ForEach(model.headers, id: \.self) { header in
+                        Section(header: Text(header, style: .time)) {
+                                        ForEach(model.groupedByDate[header]!) { item in
                                             Text(item.title)
                             }
                         }

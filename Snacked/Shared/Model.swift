@@ -49,6 +49,14 @@ class Model: ObservableObject {
         Storage.saveItems(items: items)
     }
     
+    public var groupedByDate: [Date: [Item]] {
+        Dictionary(grouping: items, by: {Calendar.current.startOfDay(for: $0.createDate)})
+    }
+    
+    public var headers: [Date] {
+        groupedByDate.map({ $0.key }).sorted()
+    }
+    
     @Published var items:[Item] = Storage.loadItems() {
         didSet {
             Storage.saveItems(items: items)
